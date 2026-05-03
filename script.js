@@ -47,27 +47,49 @@ window.addEventListener('scroll', handleNavbar);
 // Form submission handler
 const contactForm = document.querySelector('.contact-form');
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        // Premium mock success message
         const btn = contactForm.querySelector('button');
         const originalText = btn.innerHTML;
         
+        // Collect data
+        const formData = {
+            name: contactForm.querySelector('input[placeholder="Your Name"]').value,
+            email: contactForm.querySelector('input[placeholder="Your Email"]').value,
+            message: contactForm.querySelector('textarea').value
+        };
+
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         btn.disabled = true;
         
-        setTimeout(() => {
-            btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-            btn.classList.replace('btn-primary', 'btn-success');
-            
-            setTimeout(() => {
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+                btn.classList.replace('btn-primary', 'btn-success');
                 contactForm.reset();
-                btn.innerHTML = originalText;
-                btn.classList.replace('btn-success', 'btn-primary');
-                btn.disabled = false;
-            }, 3000);
-        }, 1500);
+            } else {
+                throw new Error('Failed to send');
+            }
+        } catch (error) {
+            btn.innerHTML = '<i class="fas fa-times"></i> Error! Try again.';
+            btn.classList.replace('btn-primary', 'btn-danger');
+        }
+
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-success', 'btn-danger');
+            btn.classList.add('btn-primary');
+            btn.disabled = false;
+        }, 3000);
     });
 }
 
