@@ -360,6 +360,25 @@ footer {
         height: 250px; 
         margin: 0 auto;
     }
+    .hero-img-container {
+        margin-top: 4rem; /* Added space between buttons and image */
+    }
+    .navbar-collapse {
+        background: rgba(11, 15, 25, 0.95);
+        backdrop-filter: blur(20px);
+        margin: 1rem -1rem 0;
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        border: 1px solid var(--border);
+    }
+    .nav-link {
+        padding: 0.8rem 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .nav-link:last-child {
+        border-bottom: none;
+    }
     .hero-img-bg {
         width: 350px;
         height: 350px;
